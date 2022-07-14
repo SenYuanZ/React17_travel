@@ -5,7 +5,8 @@ import {
   Footer,
   SideMenu,
   Carousel,
-  ProductCollection
+  ProductCollection,
+  Partners
 } from './components'
 import { Row, Col, Typography } from 'antd'
 import { productList1, productList2, productList3 } from './mockups'
@@ -13,12 +14,15 @@ import sideImage from './assets/images/sider_2019_12-09.png'
 import sideImage2 from './assets/images/sider_2019_02-04.png'
 import sideImage3 from './assets/images/sider_2019_02-04-2.png'
 
+/* 合作伙伴 */
+
 function App() {
   return (
     <div className={styles.App}>
       <Header />
       {/* 页面内容 content */}
       <div className={styles['page-content']}>
+        {/* 头部区域 */}
         <Row style={{ marginTop: 20 }}>
           <Col span={6}>
             <SideMenu />
@@ -27,6 +31,7 @@ function App() {
             <Carousel />
           </Col>
         </Row>
+        {/* 推荐栏目 */}
         <ProductCollection
           title={
             <Typography.Title level={3} type="warning">
@@ -54,6 +59,8 @@ function App() {
           sideImage={sideImage3}
           products={productList3}
         />
+        {/* 合作企业 */}
+        <Partners />
       </div>
 
       <Footer />
