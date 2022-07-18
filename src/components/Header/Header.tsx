@@ -4,6 +4,7 @@ import logo from '../../assets/logo.svg'
 import { Layout, Typography, Input, Menu, Button, Dropdown } from 'antd'
 import { GlobalOutlined } from '@ant-design/icons'
 import { MenuProps } from 'rc-menu'
+import { useNavigate } from 'react-router-dom'
 
 const languageItems: MenuProps['items'] = [
   { label: '中文', key: 1 },
@@ -30,29 +31,43 @@ const navItems: MenuProps['items'] = [
 ]
 
 export const Header: React.FC = () => {
+  const navigate = useNavigate()
   return (
     <div className={styles['app-header']}>
       {/* top-header */}
       <div className={styles['top-header']}>
         <div className={styles.inner}>
           <Typography.Text>让旅游更幸福</Typography.Text>
-          <Dropdown.Button style={{ marginLeft: 15 }} overlay={<Menu items={languageItems} />} icon={<GlobalOutlined />}>
+          <Dropdown.Button
+            style={{ marginLeft: 15 }}
+            overlay={<Menu items={languageItems} />}
+            icon={<GlobalOutlined />}
+          >
             语言
           </Dropdown.Button>
           <Button.Group className={styles['button-group']}>
-            <Button>注册</Button>
-            <Button>登入</Button>
+            <Button onClick={() => navigate('/register')}>注册</Button>
+            <Button onClick={() => navigate('/signIn')}>登入</Button>
           </Button.Group>
         </div>
       </div>
       <Layout.Header className={styles['main-header']}>
-        <img src={logo} alt="" className={styles['App-logo']} />
-        <Typography.Title level={3} className={styles.title}>
-          React旅游网
-        </Typography.Title>
-        <Input.Search placeholder={'请输入旅游目的地、主题、或关键字'} className={styles['search-input']} />
+        <span onClick={() => navigate('/')}>
+          <img src={logo} alt="" className={styles['App-logo']} />
+          <Typography.Title level={3} className={styles.title}>
+            React旅游网
+          </Typography.Title>
+        </span>
+        <Input.Search
+          placeholder={'请输入旅游目的地、主题、或关键字'}
+          className={styles['search-input']}
+        />
       </Layout.Header>
-      <Menu mode={'horizontal'} className={styles['main-menu']} items={navItems} />
+      <Menu
+        mode={'horizontal'}
+        className={styles['main-menu']}
+        items={navItems}
+      />
     </div>
   )
 }
