@@ -7,6 +7,10 @@ import { MenuProps } from 'rc-menu'
 import { useNavigate } from 'react-router-dom'
 import store from '../../redux/store'
 import { Trans } from 'react-i18next'
+import {
+  addLanguageActionCreator,
+  changeLanguageActionCreator
+} from '../../redux/language/languageActions'
 
 /* const languageItems: MenuProps['items'] = [
   { label: '中文', key: 1 },
@@ -46,22 +50,16 @@ export const Header: React.FC = () => {
       setLanguage(storeState.language)
       setLanguageList(storeState.languageList)
     })
-  })
+  }, [])
 
   const menuClickHandler = e => {
     console.log(e.key)
     if (e.key === 'new') {
       //处理新语言添加aciton
-      const aciton = {
-        type: 'add_language',
-        payload: { code: 'new_lang', name: '新语言' }
-      }
+      const aciton = addLanguageActionCreator('新语言', 'new_lang')
       store.dispatch(aciton)
     } else {
-      const action = {
-        type: 'change_language',
-        payload: e.key
-      }
+      const action = changeLanguageActionCreator(e.key)
       store.dispatch(action)
     }
   }
