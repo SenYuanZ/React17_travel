@@ -1,21 +1,17 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import styles from './Header.module.css'
 import logo from '../../assets/logo.svg'
 import { Layout, Typography, Input, Menu, Button, Dropdown } from 'antd'
 import { GlobalOutlined } from '@ant-design/icons'
 import { MenuProps } from 'rc-menu'
 import { useNavigate } from 'react-router-dom'
-import store from '../../redux/store'
 import { Trans } from 'react-i18next'
 import {
   addLanguageActionCreator,
   changeLanguageActionCreator
 } from '../../redux/language/languageActions'
-
-/* const languageItems: MenuProps['items'] = [
-  { label: '中文', key: 1 },
-  { label: 'English', key: 2 }
-] */
+import { useSelector } from '../../redux/hooks'
+import { useDispatch } from 'react-redux'
 
 export const Header: React.FC = () => {
   /* 导航栏列表数据 */
@@ -40,27 +36,17 @@ export const Header: React.FC = () => {
 
   /* hooks函数 */
   const navigate = useNavigate()
-  const storeState = store.getState()
-  const [language, setLanguage] = useState(storeState.language)
-  const [languageList, setLanguageList] = useState(storeState.languageList)
-
-  useEffect(() => {
-    store.subscribe(() => {
-      const storeState = store.getState()
-      setLanguage(storeState.language)
-      setLanguageList(storeState.languageList)
-    })
-  }, [])
+  const language = useSelector(state => state.language)
+  const languageList = useSelector(state => state.languageList)
+  const dispatch = useDispatch()
 
   const menuClickHandler = e => {
     console.log(e.key)
     if (e.key === 'new') {
       //处理新语言添加aciton
-      const aciton = addLanguageActionCreator('新语言', 'new_lang')
-      store.dispatch(aciton)
+      dispatch(addLanguageActionCreator('新语言', 'new_lang'))
     } else {
-      const action = changeLanguageActionCreator(e.key)
-      store.dispatch(action)
+      dispatch(changeLanguageActionCreator(e.key))
     }
   }
 
