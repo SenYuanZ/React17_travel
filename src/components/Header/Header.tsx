@@ -1,53 +1,102 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import styles from './Header.module.css'
 import logo from '../../assets/logo.svg'
 import { Layout, Typography, Input, Menu, Button, Dropdown } from 'antd'
 import { GlobalOutlined } from '@ant-design/icons'
 import { MenuProps } from 'rc-menu'
 import { useNavigate } from 'react-router-dom'
+import store from '../../redux/store'
+import { Trans } from 'react-i18next'
 
-const languageItems: MenuProps['items'] = [
+/* const languageItems: MenuProps['items'] = [
   { label: '中文', key: 1 },
   { label: 'English', key: 2 }
-]
-
-const navItems: MenuProps['items'] = [
-  { label: '旅游首页', key: 1 },
-  { label: '周末游', key: 2 },
-  { label: '跟团游', key: 3 },
-  { label: '自由行', key: 4 },
-  { label: '私家团', key: 5 },
-  { label: '邮轮', key: 6 },
-  { label: '酒店+景点', key: 7 },
-  { label: '当地玩乐', key: 8 },
-  { label: '主题游', key: 9 },
-  { label: '定制游', key: 10 },
-  { label: '游学', key: 11 },
-  { label: '签证', key: 12 },
-  { label: '企业游', key: 13 },
-  { label: '高端游', key: 14 },
-  { label: '爱玩户外', key: 15 },
-  { label: '保险', key: 16 }
-]
+] */
 
 export const Header: React.FC = () => {
+  /* 导航栏列表数据 */
+  const navItems: MenuProps['items'] = [
+    { label: <Trans>header.home_page</Trans>, key: 1 },
+    { label: <Trans>header.weekend</Trans>, key: 2 },
+    { label: <Trans>header.group</Trans>, key: 3 },
+    { label: <Trans>header.backpack</Trans>, key: 4 },
+    { label: <Trans>header.private</Trans>, key: 5 },
+    { label: <Trans>header.cruise</Trans>, key: 6 },
+    { label: <Trans>header.hotel</Trans>, key: 7 },
+    { label: <Trans>header.local</Trans>, key: 8 },
+    { label: <Trans>header.theme</Trans>, key: 9 },
+    { label: <Trans>header.custom</Trans>, key: 10 },
+    { label: <Trans>header.study</Trans>, key: 11 },
+    { label: <Trans>header.visa</Trans>, key: 12 },
+    { label: <Trans>header.enterprise</Trans>, key: 13 },
+    { label: <Trans>header.high_end</Trans>, key: 14 },
+    { label: <Trans>header.outdoor</Trans>, key: 15 },
+    { label: <Trans>header.insurance</Trans>, key: 16 }
+  ]
+
+  /* hooks函数 */
   const navigate = useNavigate()
+  const storeState = store.getState()
+  const [language, setLanguage] = useState(storeState.language)
+  const [languageList, setLanguageList] = useState(storeState.languageList)
+
+  useEffect(() => {
+    store.subscribe(() => {
+      const storeState = store.getState()
+      setLanguage(storeState.language)
+      setLanguageList(storeState.languageList)
+    })
+  })
+
+  const menuClickHandler = e => {
+    console.log(e.key)
+    if (e.key === 'new') {
+      //处理新语言添加aciton
+      const aciton = {
+        type: 'add_language',
+        payload: { code: 'new_lang', name: '新语言' }
+      }
+      store.dispatch(aciton)
+    } else {
+      const action = {
+        type: 'change_language',
+        payload: e.key
+      }
+      store.dispatch(action)
+    }
+  }
+
   return (
     <div className={styles['app-header']}>
       {/* top-header */}
       <div className={styles['top-header']}>
         <div className={styles.inner}>
-          <Typography.Text>让旅游更幸福</Typography.Text>
+          <Typography.Text>
+            <Trans>header.slogan</Trans>
+          </Typography.Text>
           <Dropdown.Button
             style={{ marginLeft: 15 }}
-            overlay={<Menu items={languageItems} />}
+            overlay={
+              <Menu onClick={menuClickHandler}>
+                {languageList.map(l => {
+                  return <Menu.Item key={l.code}>{l.name}</Menu.Item>
+                })}
+                <Menu.Item key={'new'}>
+                  <Trans>header.add_new_language</Trans>
+                </Menu.Item>
+              </Menu>
+            }
             icon={<GlobalOutlined />}
           >
-            语言
+            {language === 'zh' ? '中文' : 'EngLish'}
           </Dropdown.Button>
           <Button.Group className={styles['button-group']}>
-            <Button onClick={() => navigate('/register')}>注册</Button>
-            <Button onClick={() => navigate('/signIn')}>登入</Button>
+            <Button onClick={() => navigate('/register')}>
+              <Trans>header.register</Trans>
+            </Button>
+            <Button onClick={() => navigate('/signin')}>
+              <Trans>header.signin</Trans>
+            </Button>
           </Button.Group>
         </div>
       </div>
@@ -55,7 +104,7 @@ export const Header: React.FC = () => {
         <span onClick={() => navigate('/')}>
           <img src={logo} alt="" className={styles['App-logo']} />
           <Typography.Title level={3} className={styles.title}>
-            React旅游网
+            <Trans>header.title</Trans>
           </Typography.Title>
         </span>
         <Input.Search

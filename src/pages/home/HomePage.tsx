@@ -13,8 +13,10 @@ import { productList1, productList2, productList3 } from '../../mockups'
 import sideImage from '../../assets/images/sider_2019_12-09.png'
 import sideImage2 from '../../assets/images/sider_2019_02-04.png'
 import sideImage3 from '../../assets/images/sider_2019_02-04-2.png'
+import { useTranslation, Trans } from 'react-i18next'
 
 export const HomePage: React.FC = () => {
+  const { t } = useTranslation()
   return (
     <>
       <Header />
@@ -33,7 +35,7 @@ export const HomePage: React.FC = () => {
         <ProductCollection
           title={
             <Typography.Title level={3} type="warning">
-              爆款推荐
+              {t('home_page.hot_recommended')}
             </Typography.Title>
           }
           sideImage={sideImage}
@@ -42,7 +44,7 @@ export const HomePage: React.FC = () => {
         <ProductCollection
           title={
             <Typography.Title level={3} type="danger">
-              新品上市
+              {t('home_page.new_arrival')}
             </Typography.Title>
           }
           sideImage={sideImage2}
@@ -51,7 +53,7 @@ export const HomePage: React.FC = () => {
         <ProductCollection
           title={
             <Typography.Title level={3} type="success">
-              国内游推荐
+              {t('home_page.domestic_travel')}
             </Typography.Title>
           }
           sideImage={sideImage3}
